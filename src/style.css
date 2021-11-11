@@ -1,0 +1,191 @@
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.mainBlock {
+  display: flex;
+}
+
+.jokePageBlock {
+  padding: 40px 140px;
+  width:55%;
+  height: 100%;
+}
+.favoriteBlock {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  width: 24%;
+  height: 100%;
+  padding: 40px 40px;
+  background-color: #f8f8f8;
+}
+
+input[type="radio"],
+label {
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  position: relative;
+  height: 20px;
+  width: 20px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+input[type="radio"]::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 2px solid black;
+}
+
+input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: black;
+  transform: translate(-50%, -50%);
+  visibility: visible;
+}
+
+.btnJoke {
+  width: 152px;
+  height: 42px;
+  border-radius: 10px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: linear-gradient(90.55deg, #8ea7ff 0%, #7291ff 100%);
+  border: none;
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.btnJoke:hover {
+  background: rgb(105, 105, 182);
+}
+
+.jokeMainBlock {
+  position: relative;
+  background: #f8f8f8;
+  border-radius: 20px;
+  width: 100%;
+  padding: 67px 40px;
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.favMainBlock {
+  width: 100%;
+  position: relative;
+  background: #ffffff;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-top: 20px;
+  display: flex;
+  padding: 20px 20px;
+}
+
+.favHearthFav {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.favHearth {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.inpCategories {
+  margin-right: 25px;
+  margin-top: 26px;
+  margin-bottom: 26px;
+  padding: 6px 15px;
+  border: 2px solid #f8f8f8;
+  box-sizing: border-box;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #ababab;
+}
+.inpCategoriesNotChecked {
+  color: #ababab;
+}
+
+.inpCategoriesChecked {
+  color: black;
+}
+
+.categoryBlock {
+  padding: 6px 20px;
+  font-size: 15px;
+  color: #333333;
+  background-color: #ffffff;
+  border-radius: 6px;
+  font-weight: 600;
+  line-height: 14px;
+  letter-spacing: 2px;
+}
+
+.categoryBlockFav {
+  padding: 6px 20px;
+  font-size: 15px;
+  color: #333333;
+  background-color: #ffffff;
+  border-radius: 6px;
+  font-weight: 600;
+  line-height: 14px;
+  letter-spacing: 2px;
+}
+
+.serchInp {
+  width: 100%;
+  height: 42px;
+  margin-top: 20px;
+  border: 2px solid #333333;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding-left: 15px;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.allJokes{
+  margin-top: 535px;
+}
+
+.scrollToTop{
+  position: fixed;
+  bottom: 40px;
+  left: 20px;
+  cursor: pointer;
+  display: block;
+}
