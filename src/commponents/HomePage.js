@@ -11,6 +11,7 @@ export default function HomePage() {
     (state) => state.categoriesJokeCheked
   );
   const searchJokeCheked = useSelector((state) => state.searchJokeCheked);
+  const favJokes = useSelector((state)=> state.favJokes)
   const category = useSelector((state) => state.category);
   const searchValue = useSelector((state) => state.searchValue);
   const dispatch = useDispatch();
@@ -153,7 +154,7 @@ export default function HomePage() {
               <input
                 className="serchInp"
                 type="text"
-                placeholder="Free text search... (default: buisness)"
+                placeholder="Free text search... (example: World)"
                 onChange={(event) =>
                   dispatch({
                     type: "getSearchValue",
@@ -176,7 +177,8 @@ export default function HomePage() {
         </div>
         <div className="favoriteBlock">
           <p style={{ color: "#ABABAB", fontSize: "20px" }}>Favourite</p>
-          <FavoriteCard />
+        
+        {favJokes.length === 0 ? <div className='empty'>Empty</div> : <FavoriteCard />}
         </div>
       </div>
     </>

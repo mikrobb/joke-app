@@ -32,11 +32,6 @@ export default function FavoriteCard() {
       {favJoke.map((info) => (
         <Fragment key={info.id}>
         <div className="favMainBlock">
-        {/* <img
-            className="favHearthFav"
-            src="https://img.icons8.com/material-outlined/24/fa314a/like--v1.png"
-            alt="favIcon"
-          /> */}
           {!favJoke.includes(info) ? (
             <img
               className="favHearthFav"
