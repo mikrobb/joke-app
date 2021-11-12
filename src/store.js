@@ -1,60 +1,69 @@
 import { createStore } from "redux";
+import { RANDOM_RADIO_IS_CHEKED,
+  CATEGORIES_RADIO_IS_CHEKED, 
+  SEARCH_RADIO_IS_CHEKED , 
+  GET_RANDOM_JOKE,
+  GET_FAVORITE_JOKES,
+  CATEGORY_TO_FIND,
+  SEARCH_FIND_VALUE,
+  GET_JOKES_FROM_SEARCH } from "./actions";
 
 function getFromLocalStorage(key) {
   return JSON.parse(localStorage.getItem(key));
 }
 
 const initialState = {
-  randomJokeCheked: false,
-  categoriesJokeCheked: false,
-  category: "",
-  searchJokeCheked: false,
-  getJoke: null,
-  getJokeSearch: [],
-  favJokes: getFromLocalStorage("favJoke") || [],
-  searchValue: "",
+  randomRadioIsCheked: false,
+  categoriesRadioIsCheked: false,
+  selectedCategory: "",
+  seacrhRadioIsCheked: false,
+  searchFindValue: "",
+  getRandomJoke: null,
+  getJokesFromSearch: [],
+  favoriteJokes: getFromLocalStorage("favJoke") || [],
+  
 };
 
 function reducer(state = initialState, action) {
   switch (action.type) {
-    case "randomJokeCheked": {
+    case RANDOM_RADIO_IS_CHEKED: {
       return {
         ...state,
-        randomJokeCheked: action.payload,
-        categoriesJokeCheked: false,
-        searchJokeCheked: false,
+        randomRadioIsCheked: action.payload,
+        categoriesRadioIsCheked: false,
+        seacrhRadioIsCheked: false,
       };
     }
-    case "categoriesJokeCheked": {
+    case CATEGORIES_RADIO_IS_CHEKED: {
       return {
         ...state,
-        randomJokeCheked: false,
-        categoriesJokeCheked: action.payload,
-        searchJokeCheked: false,
+        randomRadioIsCheked: false,
+        categoriesRadioIsCheked: action.payload,
+        seacrhRadioIsCheked: false,
       };
     }
-    case "searchJokeCheked": {
+    case CATEGORY_TO_FIND: {
+      return { ...state, selectedCategory: action.payload };
+    }
+    case SEARCH_RADIO_IS_CHEKED: {
       return {
         ...state,
-        randomJokeCheked: false,
-        categoriesJokeCheked: false,
-        searchJokeCheked: action.payload,
+        randomRadioIsCheked: false,
+        categoriesRadioIsCheked: false,
+        seacrhRadioIsCheked: action.payload,
       };
     }
-    case "getJoke": {
-      return { ...state, getJoke: action.payload };
+    case SEARCH_FIND_VALUE: {
+      return { ...state, searchFindValue: action.payload };
     }
-    case "getFavJoke": {
-      return { ...state, favJokes: action.payload };
+    case GET_RANDOM_JOKE: {
+      return { ...state, getRandomJoke: action.payload };
     }
-    case "getCategory": {
-      return { ...state, category: action.payload };
+    case GET_JOKES_FROM_SEARCH: {
+      return { ...state, getJokesFromSearch: action.payload };
     }
-    case "getSearchValue": {
-      return { ...state, searchValue: action.payload };
-    }
-    case "getJokeSearch": {
-      return { ...state, getJokeSearch: action.payload };
+    case GET_FAVORITE_JOKES: {
+      return { ...state, favoriteJokes: action.payload };
     }
     default: {
       return { ...state };
