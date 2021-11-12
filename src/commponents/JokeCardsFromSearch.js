@@ -3,49 +3,53 @@ import JokeIconMessage from "../image-icons/JokeImage.png";
 import link from "../image-icons/link.png";
 import { useSelector, useDispatch } from "react-redux";
 import { Fragment } from "react";
+import {GET_FAVORITE_JOKES} from "../actions";
 
 function setToLocalStorage(key, value) {
   return localStorage.setItem(key, JSON.stringify(value));
 }
 
 export default function JokeCardSearch() {
-  const favJoke = useSelector((state) => state.favJokes);
-  const getJokeSearch = useSelector((state) => state.getJokeSearch);
+  const favoriteJokes = useSelector((state) => state.favoriteJokes);
+  const getJokesFromSearch = useSelector((state) => state.getJokesFromSearch);
+  const getRandomJoke = useSelector((state)=>state.getRandomJoke)
   const dispatch = useDispatch();
 
-  function togle(id) {
-    if (favJoke.includes(id)) {
-      const newArray = favJoke.filter((item) => {
-        return item !== id;
+  function addOrRemoveFromFavorite(joke) {
+    if (favoriteJokes.includes(joke)) {
+      const newArray = favoriteJokes.filter((item) => {
+        return item !== joke;
       });
-      dispatch({ type: "getFavJoke", payload: newArray });
+      dispatch({ type: GET_FAVORITE_JOKES, payload: newArray });
       setToLocalStorage("favJoke", newArray);
     } else {
-      const newArray = [...favJoke];
-      newArray.push(id);
-      dispatch({ type: "getFavJoke", payload: newArray });
+      const newArray = [...favoriteJokes];
+      newArray.push(joke);
+      dispatch({ type: GET_FAVORITE_JOKES, payload: newArray });
       setToLocalStorage("favJoke", newArray);
     }
   }
 
+
+
   return (
     <>
-    {getJokeSearch.length === 0 ? <div style={{fontWeight:'bold', fontSize:'30px'}}></div>: getJokeSearch.map((info) => (
-      <Fragment key={info.id}>
+    {getJokesFromSearch.length === 0 ? <div style={{fontWeight:'bold', fontSize:'30px'}}>No joke found</div>: getJokesFromSearch.map((joke) => (
+      <Fragment key={joke.id}>
         <div className="jokeMainBlock">
-          {!favJoke.includes(info) ? (
+          {!favoriteJokes.find((jokeSearch)=> jokeSearch.id === joke.id) ? (
             <img
               className="favHearth"
               src="https://img.icons8.com/material-outlined/24/fa314a/like--v1.png"
               alt="favIcon"
-              onClick={() => togle(info)}
+              onClick={() => addOrRemoveFromFavorite(joke)}
             />
           ) : (
             <img
               className="favHearth"
               src="https://img.icons8.com/ios-glyphs/30/fa314a/like--v1.png"
               alt="favIcon"
-              onClick={() => togle(info)}
+              onClick={() => addOrRemoveFromFavorite(joke)}
             />
           )}
           <div style={{ marginRight: "20px" }}>
@@ -59,9 +63,9 @@ export default function JokeCardSearch() {
             <p style={{ fontSize: "10px", marginBottom: "5px" }}>
               ID:
               <span style={{ color: "blue", marginRight: "5px" }}>
-                {info.id}
+                {joke.id}
               </span>
-              <a href={info.url}>
+              <a href={joke.url}>
                 <img src={link} alt="" />
               </a>
             </p>
@@ -72,7 +76,7 @@ export default function JokeCardSearch() {
                 marginBottom: "28px",
               }}
             >
-              {info.value}
+              {joke.value}
             </p>
             <div
               style={{
@@ -83,9 +87,9 @@ export default function JokeCardSearch() {
               }}
             >
               <span style={{ color: "#ABABAB", fontSize: "10px" }}>
-                Last update {info.updated_at}
+                Last update {joke.updated_at}
               </span>
-              <div className="categoryBlock">{info.categories}</div>
+              <div className="categoryBlock">{joke.categories}</div>
             </div>
           </div>
         </div>

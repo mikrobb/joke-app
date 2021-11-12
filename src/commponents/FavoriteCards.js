@@ -3,6 +3,7 @@ import JokeIconMessage from "../image-icons/JokeImage.png";
 import link from "../image-icons/link.png";
 import { useSelector, useDispatch } from "react-redux";
 import { Fragment } from "react";
+import { GET_FAVORITE_JOKES} from "../actions";
 
 function setToLocalStorage(key, value) {
   return localStorage.setItem(key, JSON.stringify(value));
@@ -10,41 +11,41 @@ function setToLocalStorage(key, value) {
 
 
 export default function FavoriteCard() {
-  const favJoke = useSelector((state) => state.favJokes);
+  const favoriteJokes = useSelector((state) => state.favoriteJokes);
   const dispatch = useDispatch();
 
-  function togle(id) {
-    if (favJoke.includes(id)) {
-      const newArray = favJoke.filter((item) => {
-        return item !== id;
+  function addOrRemoveFromFavorite(joke) {
+    if (favoriteJokes.includes(joke)) {
+      const newArray = favoriteJokes.filter((item) => {
+        return item !== joke;
       });
-      dispatch({ type: "getFavJoke", payload: newArray });
+      dispatch({ type: GET_FAVORITE_JOKES, payload: newArray });
       setToLocalStorage("favJoke", newArray);
     } else {
-      const newArray = [...favJoke];
-      newArray.push(id);
-      dispatch({ type: "getFavJoke", payload: newArray });
+      const newArray = [...favoriteJokes];
+      newArray.push(joke);
+      dispatch({ type: GET_FAVORITE_JOKES, payload: newArray });
       setToLocalStorage("favJoke", newArray);
     }
   }
   return (
     <>
-      {favJoke.map((info) => (
-        <Fragment key={info.id}>
+      {favoriteJokes.map((joke) => (
+        <Fragment key={joke.id}>
         <div className="favMainBlock">
-          {!favJoke.includes(info) ? (
+          {!favoriteJokes.find((joke)=>joke.id === joke.id) ? (
             <img
               className="favHearthFav"
               src="https://img.icons8.com/material-outlined/24/fa314a/like--v1.png"
               alt="favIcon"
-              onClick={() => togle(info)}
+              onClick={() => addOrRemoveFromFavorite(joke)}
             />
           ) : (
             <img
               className="favHearthFav"
               src="https://img.icons8.com/ios-glyphs/30/fa314a/like--v1.png"
               alt="favIcon"
-              onClick={() => togle(info)}
+              onClick={() => addOrRemoveFromFavorite(joke)}
             />
           )}
           <div style={{ marginRight: "20px" }}>
@@ -58,9 +59,9 @@ export default function FavoriteCard() {
             <p style={{ fontSize: "10px", marginBottom: "5px" }}>
               ID:
               <span style={{ color: "blue", marginRight: "5px" }}>
-                {info.id}
+                {joke.id}
               </span>
-              <a href={info.url}>
+              <a href={joke.url}>
                 <img src={link} alt="" />
               </a>
             </p>
@@ -71,7 +72,7 @@ export default function FavoriteCard() {
                 marginBottom: "28px",
               }}
             >
-              {info.value}
+              {joke.value}
             </p>
             <div
               style={{
@@ -82,9 +83,9 @@ export default function FavoriteCard() {
               }}
             >
               <span style={{ color: "#ABABAB", fontSize: "10px" }}>
-                Last update {info.updated_at}
+                Last update {joke.updated_at}
               </span>
-              <div className="categoryBlockFav">{info.categories}</div>
+              <div className="categoryBlockFav">{joke.categories}</div>
             </div>
           </div>
         </div>

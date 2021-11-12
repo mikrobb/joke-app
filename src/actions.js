@@ -1,0 +1,8 @@
+export const RANDOM_RADIO_IS_CHEKED = "randomJokeCheked"
+export const CATEGORIES_RADIO_IS_CHEKED = "categoriesJokeCheked"
+export const SEARCH_RADIO_IS_CHEKED = "searchJokeCheked"
+export const GET_RANDOM_JOKE = "getJoke"
+export const GET_FAVORITE_JOKES = "getFavJoke"
+export const CATEGORY_TO_FIND = "getCategory"
+export const SEARCH_FIND_VALUE = "getSearchValue"
+export const GET_JOKES_FROM_SEARCH = "getJokeSearch"

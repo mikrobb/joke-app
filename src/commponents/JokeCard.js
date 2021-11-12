@@ -2,6 +2,8 @@ import React from "react";
 import JokeIconMessage from "../image-icons/JokeImage.png";
 import link from "../image-icons/link.png";
 import { useSelector, useDispatch } from "react-redux";
+import { GET_FAVORITE_JOKES } from "../actions";
+
 
 function setToLocalStorage(key, value) {
   return localStorage.setItem(key, JSON.stringify(value));
@@ -9,28 +11,28 @@ function setToLocalStorage(key, value) {
 
 
 export default function JokeCard() {
-  const favJoke = useSelector((state) => state.favJokes);
-  const getJoke = useSelector((state) => state.getJoke);
+  const favoriteJokes = useSelector((state) => state.favoriteJokes);
+  const getRandomJoke = useSelector((state) => state.getRandomJoke);
   const dispatch = useDispatch();
 
-  function togle(id) {
-    if (favJoke.includes(id)) {
-      const newArray = favJoke.filter((item) => {
-        return item !== id;
+  function addOrRemoveFromFavorite(joke) {
+    if (favoriteJokes.includes(joke)) {
+      const newArray = favoriteJokes.filter((item) => {
+        return item !== joke;
       });
-      dispatch({ type: "getFavJoke", payload: newArray });
+      dispatch({ type: GET_FAVORITE_JOKES, payload: newArray });
       setToLocalStorage("favJoke", newArray);
     } else {
-      const newArray = [...favJoke];
-      newArray.push(id);
-      dispatch({ type: "getFavJoke", payload: newArray });
+      const newArray = [...favoriteJokes];
+      newArray.push(joke);
+      dispatch({ type: GET_FAVORITE_JOKES, payload: newArray });
       setToLocalStorage("favJoke", newArray);
     }
   }
 
-  if(!getJoke){
+  if(!getRandomJoke){
     return(
-      <div></div>
+      <div style={{fontWeight:'bold', fontSize:'30px'}}>No joke found</div>
     )
   }
 
@@ -38,19 +40,19 @@ export default function JokeCard() {
     <>
     
       <div className="jokeMainBlock">
-        {!favJoke.includes(getJoke) ? (
+        {!favoriteJokes.find((joke)=>joke.id === getRandomJoke.id) ? (
           <img
             className="favHearth"
             src="https://img.icons8.com/material-outlined/24/fa314a/like--v1.png"
             alt="favIcon"
-            onClick={() => togle(getJoke)}
+            onClick={() => addOrRemoveFromFavorite(getRandomJoke)}
           />
         ) : (
           <img
             className="favHearth"
             src="https://img.icons8.com/ios-glyphs/30/fa314a/like--v1.png"
             alt="favIcon"
-            onClick={() => togle(getJoke)}
+            onClick={() => addOrRemoveFromFavorite(getRandomJoke)}
           />
         )}
         <div style={{ marginRight: "20px" }}>
@@ -64,9 +66,9 @@ export default function JokeCard() {
           <p style={{ fontSize: "10px", marginBottom: "5px" }}>
             ID:
             <span style={{ color: "blue", marginRight: "5px" }}>
-              {getJoke.id}
+              {getRandomJoke.id}
             </span>
-            <a href={getJoke.url}>
+            <a href={getRandomJoke.url}>
               <img src={link} alt="" />
             </a>
           </p>
@@ -77,7 +79,7 @@ export default function JokeCard() {
               marginBottom: "28px",
             }}
           >
-            {getJoke.value}
+            {getRandomJoke.value}
           </p>
           <div
             style={{
@@ -88,9 +90,9 @@ export default function JokeCard() {
             }}
           >
             <span style={{ color: "#ABABAB", fontSize: "10px" }}>
-                Last update {getJoke.updated_at}
+                Last update {getRandomJoke.updated_at}
               </span>
-            <div className="categoryBlock">{getJoke.categories}</div>
+            <div className="categoryBlock">{getRandomJoke.categories}</div>
           </div>
         </div>
       </div>

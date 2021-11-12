@@ -1,57 +1,79 @@
 import React from "react";
 import JokeCard from "./JokeCard";
 import { useSelector, useDispatch } from "react-redux";
-import JokeCardSearch from "./JokeCardSearch";
-import FavoriteCard from "./FavoriteCard";
+import JokeCardsFromSearch from "./JokeCardsFromSearch";
+import FavoriteCards from "./FavoriteCards";
+import { RANDOM_RADIO_IS_CHEKED,
+  CATEGORIES_RADIO_IS_CHEKED, 
+  SEARCH_RADIO_IS_CHEKED , 
+  GET_RANDOM_JOKE,
+  CATEGORY_TO_FIND,
+  SEARCH_FIND_VALUE,
+  GET_JOKES_FROM_SEARCH } from "../actions";
 
 export default function HomePage() {
-  const minLettees = 3;
-  const randomJokeCheked = useSelector((state) => state.randomJokeCheked);
-  const categoriesJokeCheked = useSelector(
-    (state) => state.categoriesJokeCheked
-  );
-  const searchJokeCheked = useSelector((state) => state.searchJokeCheked);
-  const favJokes = useSelector((state)=> state.favJokes)
-  const category = useSelector((state) => state.category);
-  const searchValue = useSelector((state) => state.searchValue);
+  const minLettersToFind = 3;
+
+  const randomRadioIsCheked = useSelector((state) => state.randomRadioIsCheked);
+  const categoriesRadioIsCheked = useSelector((state) => state.categoriesRadioIsCheked);
+  const seacrhRadioIsCheked = useSelector((state) => state.seacrhRadioIsCheked);
+
+  const selectedCategory = useSelector((state) => state.selectedCategory);
+  const searchFindValue = useSelector((state) => state.searchFindValue);
+  
+  const favoriteJokes = useSelector((state)=> state.favoriteJokes)
   const dispatch = useDispatch();
+
 
   function getJoke() {
     if (
-      randomJokeCheked === false &&
-      categoriesJokeCheked === false &&
-      searchJokeCheked === false
+      randomRadioIsCheked === false &&
+      categoriesRadioIsCheked === false &&
+      seacrhRadioIsCheked === false
     )
       alert("Сhoose which joke you want to find");
-    if (randomJokeCheked === true) {
+
+
+    if (randomRadioIsCheked === true) {
       fetch("https://api.chucknorris.io/jokes/random")
         .then((data) => data.json())
-        .then((json) => dispatch({ type: "getJoke", payload: json }));
+        .then((json) => dispatch({ type: GET_RANDOM_JOKE, payload: json }));
     }
-    if (categoriesJokeCheked === true && category) {
-      fetch(`https://api.chucknorris.io/jokes/random?category=${category}`)
+
+
+    if (categoriesRadioIsCheked === true && selectedCategory) {
+      fetch(`https://api.chucknorris.io/jokes/random?category=${selectedCategory}`)
         .then((data) => data.json())
-        .then((json) => dispatch({ type: "getJoke", payload: json }));
-    } else if(categoriesJokeCheked === true && !category){
+        .then((json) => dispatch({ type: GET_RANDOM_JOKE, payload: json }));
+    } else if(categoriesRadioIsCheked === true && !selectedCategory){
       alert('Chose your category')
     }
-    if (searchValue.length < minLettees && searchJokeCheked === true) {
+
+
+    if (searchFindValue.length < minLettersToFind && seacrhRadioIsCheked === true) {
       alert("Please enter more than 3 characters");
-    } else if (searchJokeCheked === true && searchValue.length > minLettees) {
-      fetch(`https://api.chucknorris.io/jokes/search?query=${searchValue}`)
+    } else if (seacrhRadioIsCheked === true && searchFindValue.length > minLettersToFind) {
+      fetch(`https://api.chucknorris.io/jokes/search?query=${searchFindValue}`)
         .then((data) => data.json())
         .then((json) =>
-          dispatch({ type: "getJokeSearch", payload: json.result })
+          dispatch({ type: GET_JOKES_FROM_SEARCH, payload: json.result })
         );
     }
+
+    dispatch({
+      type: SEARCH_FIND_VALUE,
+      payload: '',
+    })
   }
+
 
   function getCategory(event) {
     dispatch({
-      type: "getCategory",
+      type: CATEGORY_TO_FIND,
       payload: event.target.value.toLowerCase(),
     });
   }
+
 
   return (
     <>
@@ -75,7 +97,7 @@ export default function HomePage() {
                 name="choise"
                 id="random"
                 onChange={() =>
-                  dispatch({ type: "randomJokeCheked", payload: true })
+                  dispatch({ type: RANDOM_RADIO_IS_CHEKED, payload: true })
                 }
               />
               <label htmlFor="random">Random</label>
@@ -87,18 +109,18 @@ export default function HomePage() {
                 name="choise"
                 id="categories"
                 onChange={() =>
-                  dispatch({ type: "categoriesJokeCheked", payload: true })
+                  dispatch({ type: CATEGORIES_RADIO_IS_CHEKED, payload: true })
                 }
               />
               <label htmlFor="categories">From categories</label>
               <br />
             </div>
-            {categoriesJokeCheked === true ? (
+            {categoriesRadioIsCheked === true ? (
               <span style={{ marginLeft: "10px" }}>
                 <input
                   onClick={getCategory}
                   className={
-                    category.includes("animal")
+                    selectedCategory.includes("animal")
                       ? "inpCategories inpCategoriesChecked"
                       : "inpCategories"
                   }
@@ -108,7 +130,7 @@ export default function HomePage() {
                 <input
                   onClick={getCategory}
                   className={
-                    category.includes("career")
+                    selectedCategory.includes("career")
                       ? "inpCategories inpCategoriesChecked"
                       : "inpCategories"
                   }
@@ -118,7 +140,7 @@ export default function HomePage() {
                 <input
                   onClick={getCategory}
                   className={
-                    category.includes("celebrity")
+                    selectedCategory.includes("celebrity")
                       ? "inpCategories inpCategoriesChecked"
                       : "inpCategories"
                   }
@@ -128,7 +150,7 @@ export default function HomePage() {
                 <input
                   onClick={getCategory}
                   className={
-                    category.includes("dev")
+                    selectedCategory.includes("dev")
                       ? "inpCategories inpCategoriesChecked"
                       : "inpCategories"
                   }
@@ -144,23 +166,24 @@ export default function HomePage() {
                 name="choise"
                 id="search"
                 onChange={() =>
-                  dispatch({ type: "searchJokeCheked", payload: true })
+                  dispatch({ type: SEARCH_RADIO_IS_CHEKED, payload: true })
                 }
               />
               <label htmlFor="search">Search</label>
               <br />
             </div>
-            {searchJokeCheked === true ? (
+            {seacrhRadioIsCheked === true ? (
               <input
                 className="serchInp"
                 type="text"
                 placeholder="Free text search... (example: World)"
                 onChange={(event) =>
                   dispatch({
-                    type: "getSearchValue",
+                    type: SEARCH_FIND_VALUE,
                     payload: event.target.value,
                   })
                 }
+                value={searchFindValue}
               />
             ) : null}
 
@@ -169,16 +192,16 @@ export default function HomePage() {
             </button>
           </form>
           
-          {randomJokeCheked === true || categoriesJokeCheked === true ? (
+          {randomRadioIsCheked === true || categoriesRadioIsCheked === true ? (
             <JokeCard />
           ) : (
-            <JokeCardSearch />
+            <JokeCardsFromSearch />
           )}
         </div>
         <div className="favoriteBlock">
           <p style={{ color: "#ABABAB", fontSize: "20px" }}>Favourite</p>
         
-        {favJokes.length === 0 ? <div className='empty'>Empty</div> : <FavoriteCard />}
+        {favoriteJokes.length === 0 ? <div className='empty'>Empty</div> : <FavoriteCards />}
         </div>
       </div>
     </>
